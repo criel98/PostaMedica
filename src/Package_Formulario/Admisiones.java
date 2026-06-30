@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Package_Clases.DatosPacienteCSV;
 import Package_Clases.Paciente;
+import Package_Clases.GestorColas;
+import javax.print.attribute.standard.PrinterMessageFromOperator;
 
 public class Admisiones extends javax.swing.JFrame {
 
@@ -622,13 +624,12 @@ public class Admisiones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // 1. Validación de campos
+       // 1. Validación de campos
         if (!validar_campos_formulario()) {
             return;
         }
 
-        // 2. EXTRACCIÓN: Aquí es donde declaramos las variables que faltaban
-        // Debes obtener el texto de cada caja correspondiente a tu diseño
+        // 2. Extracción de datos
         String numDoc = txtNumeroDocumento.getText().trim();
         String nombre = txtNombre.getText().toUpperCase().trim();
         String apPaterno = txtApellidoPaterno.getText().toUpperCase().trim();
@@ -636,19 +637,36 @@ public class Admisiones extends javax.swing.JFrame {
         String fechaNac = txtFechaNacim.getText().trim();
         String genero = (cboGenero.getSelectedIndex() == 0) ? "No especifica" : cboGenero.getSelectedItem().toString();
         String tipoDoc = (cboTipoDocumento.getSelectedIndex() == 0) ? "" : cboTipoDocumento.getSelectedItem().toString();
-        int numero = (Integer.parseInt((txtTelefono.getText().trim())));
+        
+        // Manejo seguro del número de teléfono (por si el usuario deja el campo vacío)
+        int numero = 0;
+        try {
+            numero = Integer.parseInt(txtTelefono.getText().trim());
+        } catch (NumberFormatException e) {
+            numero = 0; 
+        }
+        
         String tipoAtencion = cboEmergencia.getSelectedItem().toString();
+        
         // 3. Generación de ID
         int idGenerado = (int) (System.currentTimeMillis() % 100000);
 
-        // 4. Creación del objeto (ahora ya existen las variables)
+        // 4. Creación del objeto
         Package_Clases.Paciente nuevoPaciente = new Package_Clases.Paciente(
                 idGenerado, nombre, apPaterno, apMaterno, fechaNac, genero, tipoDoc, numDoc, numero, tipoAtencion
         );
+        
+        // 5. Persistencia (Guardado en CSV)
         gestor.Guardar(nuevoPaciente);
-        // 5. Persistencia
-//        gestor.Guardar(nuevoPaciente);
-        JOptionPane.showMessageDialog(this, "Paciente registrado con éxito. Código: " + idGenerado);
+        
+        // 6. ENRUTAMIENTO: Derivar a la cola correspondiente
+        if (tipoAtencion.equalsIgnoreCase("Emergencia")) {
+            GestorColas.getInstancia().encolarConsultorio(nuevoPaciente);
+            JOptionPane.showMessageDialog(this, "Paciente registrado. ¡DERIVADO A EMERGENCIA!");
+        } else {
+            GestorColas.getInstancia().encolarTriaje(nuevoPaciente);
+            JOptionPane.showMessageDialog(this, "Paciente registrado y enviado a Triaje.");
+        }
         limpiarCampos();
         cargarTablaDesdeGestor();
 
@@ -728,14 +746,17 @@ public class Admisiones extends javax.swing.JFrame {
         Paciente pacienteEncontrado = gestor.Buscar(dniBusqueda);
         if (pacienteEncontrado != null) {
             // Rellenamos el formulario automáticamente
+            cboEmergencia.setSelectedItem(pacienteEncontrado.getTipoPaciente());
+            cboTipoDocumento.setSelectedItem(pacienteEncontrado.getTipoDocumento());
             txtNombre.setText(pacienteEncontrado.getNombre());
             txtApellidoPaterno.setText(pacienteEncontrado.getApellidoPaterno());
             txtApellidoMaterno.setText(pacienteEncontrado.getApellidoMaterno());
             txtNumeroDocumento.setText(pacienteEncontrado.getNumeroDocumento());
             txtFechaNacim.setText(pacienteEncontrado.getFechaNacimiento());
             cboGenero.setSelectedItem(pacienteEncontrado.getGenero());
-
-            JOptionPane.showMessageDialog(this, "Paciente encontrado.");
+            txtTelefono.setText(Integer.toString(pacienteEncontrado.getNumeroTelefono()));
+            txtBuscar.setText("");
+            JOptionPane.showMessageDialog(this, "Paciente con encontrado: "+ pacienteEncontrado.getNombre()+ " (ID: " + pacienteEncontrado.getIdPaciente() + ")");
         } else {
             JOptionPane.showMessageDialog(this, "Paciente no registrado. Puede proceder a registrarlo como nuevo.");
         }

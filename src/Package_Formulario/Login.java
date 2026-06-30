@@ -6,7 +6,7 @@ import javax.swing.UIManager;
 import Package_Clases.Usuario;
 
 public class Login extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
     Usuario usuarioRegistrado = new Usuario(1, "admin", "123", true, null);
 
@@ -16,8 +16,9 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         personalizarDiseño();
+        
     }
-    
+
     private void personalizarDiseño() {
         // Cambiar el texto por defecto del checkbox
         jCheckBox1.setText("Recordarme");
@@ -32,6 +33,7 @@ public class Login extends javax.swing.JFrame {
         /* * Agregar iconos vectoriales a los inputs (Pistas de ruta)
          * Nota: Asegúrate de tener las imágenes .svg dentro de tu estructura de paquetes libres
          */
+        
     }
 
     /**
@@ -239,7 +241,7 @@ public class Login extends javax.swing.JFrame {
 
         // 3. Delegamos la validación e intentos directamente al método de la clase Usuario
         if (usuarioRegistrado.validarLogin(inputUser, inputPass)) {
-            JOptionPane.showMessageDialog(rootPane, "¡Acceso concedido! Bienvenido "+ txtUser.getText()+" al sistema.", "Login Exitoso", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "¡Acceso concedido! Bienvenido " + txtUser.getText() + " al sistema.", "Login Exitoso", JOptionPane.INFORMATION_MESSAGE);
 
             // Cerramos la ventana actual de Login
             this.dispose();
@@ -255,7 +257,7 @@ public class Login extends javax.swing.JFrame {
                 txtUser.setEnabled(false);
                 txtPass.setEnabled(false);
                 btnLogin.setEnabled(false);
-                
+
             } else {
                 // Mensaje de advertencia mostrando dinámicamente los intentos que le quedan en el objeto
                 int intentosRestantes = usuarioRegistrado.getIntentosRestantes();
@@ -281,7 +283,11 @@ public class Login extends javax.swing.JFrame {
             UIManager.put("Component.arc", 15);
             UIManager.put("TextComponent.arc", 12);
             UIManager.put("Button.innerFocusWidth", 0);
-            
+            UIManager.put("Component.arc", 20); // Redondea todos los componentes (botones, combos, etc.)
+            UIManager.put("Panel.arc", 20);     // <--- ESTA LÍNEA REDONDEA TODOS LOS JPANELS
+
+            UIManager.put("Button.innerFocusWidth", 0);
+
         } catch (Exception ex) {
             logger.log(java.util.logging.Level.SEVERE, "Error al cargar FlatLaf", ex);
         }

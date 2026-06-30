@@ -242,6 +242,7 @@ public class Menu extends javax.swing.JFrame {
         try {
             // FlatLaf toma el control desde la ventana principal
             com.formdev.flatlaf.FlatLightLaf.setup();
+            
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, "Error FlatLaf", ex);
         }
