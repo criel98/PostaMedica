@@ -12,6 +12,7 @@ public class DatosPacienteCSV {
 
     // Ruta relativa: El archivo se creará en la carpeta principal de tu proyecto en NetBeans
     private String rutaCSV = "pacientes.csv";
+    private String rutaHistoriasCSV = "historias.csv";
 
     // Constructor: Se asegura de que el archivo exista apenas iniciemos el sistema
     public DatosPacienteCSV() {
@@ -20,9 +21,16 @@ public class DatosPacienteCSV {
 
     private void verificarArchivo() {
         try {
-            File archivo = new File(rutaCSV);
-            if (!archivo.exists()) {
-                archivo.createNewFile(); // Crea el archivo si es la primera vez que abres el sistema
+            // Verificar archivo de pacientes
+            File archivoPacientes = new File(rutaCSV);
+            if (!archivoPacientes.exists()) {
+                archivoPacientes.createNewFile();
+            }
+
+            // Verificar archivo de historias clínicas
+            File archivoHistorias = new File(rutaHistoriasCSV);
+            if (!archivoHistorias.exists()) {
+                archivoHistorias.createNewFile();
             }
         } catch (IOException e) {
             System.out.println("Error al crear la base de datos CSV: " + e.getMessage());
@@ -45,11 +53,11 @@ public class DatosPacienteCSV {
 
                     // Reconstruimos al Paciente usando el constructor que ya tienes
                     // Formato guardado: idPaciente, nombre, paterno, materno, fecha, genero, tipoDoc, numeroDoc, numeroTelefono, tipoPaciente
-                     int id = Integer.parseInt(datos[0]);
+                    int id = Integer.parseInt(datos[0]);
                     int numero = Integer.parseInt(datos[8]);
                     Paciente p = new Paciente(id, datos[1], datos[2], datos[3], datos[4], datos[5], datos[6], datos[7], numero, datos[9]);
                     return p;
-                
+
                 }
             }
         } catch (IOException e) {
@@ -73,7 +81,7 @@ public class DatosPacienteCSV {
                     + p.getGenero() + ","
                     + p.getTipoDocumento() + ","
                     + p.getNumeroDocumento() + ","
-                    + p.getNumeroTelefono()+ ","
+                    + p.getNumeroTelefono() + ","
                     + p.getTipoPaciente();
 
             pw.println(linea);
@@ -98,10 +106,100 @@ public class DatosPacienteCSV {
                     lista.add(p);
                 }
             }
-           
+
         } catch (IOException e) {
             System.out.println("Error al listar: " + e.getMessage());
         }
         return lista;
+    }
+
+    public Paciente buscarPorId(int idBuscado) {
+        // Asumiendo que tu método que lee el CSV y devuelve la lista se llama listarPacientes()
+        java.util.ArrayList<Paciente> lista = listarPacientes();
+
+        for (Paciente p : lista) {
+            if (p.getIdPaciente() == idBuscado) {
+                return p; // Retorna el paciente exacto al encontrar coincidencia de ID
+            }
+        }
+        return null; // Si no lo encuentra
+    }
+
+    public boolean actualizarPaciente(Paciente pacienteActualizado) {
+        // 1. Cargamos todos los pacientes actuales a una lista en memoria
+        java.util.ArrayList<Paciente> listaPacientes = listarPacientes();
+        boolean encontrado = false;
+
+        // 2. Buscamos al paciente por su ID y lo reemplazamos con los datos nuevos
+        for (int i = 0; i < listaPacientes.size(); i++) {
+            if (listaPacientes.get(i).getIdPaciente() == pacienteActualizado.getIdPaciente()) {
+                listaPacientes.set(i, pacienteActualizado); // Reemplaza el objeto viejo por el nuevo
+                encontrado = true;
+                break;
+            }
+        }
+
+        // 3. Si lo encontramos y modificamos, reescribimos el archivo CSV por completo
+        if (encontrado) {
+            try {
+                // Instanciamos FileWriter con 'false' para SOBREESCRIBIR el archivo desde cero
+                java.io.PrintWriter pw = new java.io.PrintWriter(new java.io.FileWriter(rutaCSV, false));
+
+                // Recorremos la lista actualizada y guardamos línea por línea
+                for (Paciente p : listaPacientes) {
+                    // Asegúrate de que el orden de las variables aquí sea exactamente igual al de tu método Guardar() original
+                    pw.println(p.getIdPaciente() + "," + p.getNombre() + "," + p.getApellidoPaterno() + ","
+                            + p.getApellidoMaterno() + "," + p.getFechaNacimiento() + "," + p.getGenero() + ","
+                            + p.getTipoDocumento() + "," + p.getNumeroDocumento() + "," + p.getNumeroTelefono() + ","
+                            + p.getTipoPaciente());
+                }
+                pw.close();
+                return true;
+            } catch (Exception e) {
+                System.out.println("Error al reescribir el archivo CSV: " + e.getMessage());
+                return false;
+            }
+        }
+        return false;
+    }
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    // NUEVOS MÉTODOS PARA EL MANEJO DE LA HISTORIA CLÍNICA
+    public void guardarHistoriaClinica(HistoriaClinica hc) {
+        try (FileWriter fw = new FileWriter(rutaHistoriasCSV, true); PrintWriter pw = new PrintWriter(fw)) {
+            pw.println(hc.toCSV()); // Reutiliza el toCSV() que creamos en tu clase
+        } catch (IOException e) {
+            System.out.println("Error al guardar la historia clínica: " + e.getMessage());
+        }
+    }
+    
+    public ArrayList<HistoriaClinica> listarHistoriasPorPaciente(int idPacienteBuscado) {
+        ArrayList<HistoriaClinica> historial = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(rutaHistoriasCSV))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos.length >= 9) {
+                    int idPaciente = Integer.parseInt(datos[1]);
+                    // Filtramos: Solo agregamos si corresponde al paciente consultado
+                    if (idPaciente == idPacienteBuscado) {
+                        HistoriaClinica hc = new HistoriaClinica(
+                            Integer.parseInt(datos[0]), // idRegistro
+                            idPaciente,                 // idPaciente
+                            datos[2],                   // fecha
+                            Double.parseDouble(datos[3]), // peso
+                            Double.parseDouble(datos[4]), // talla
+                            Double.parseDouble(datos[5]), // temperatura
+                            Integer.parseInt(datos[6]),   // pulso
+                            Integer.parseInt(datos[7]),   // saturacion
+                            datos[8]                    // presionArterial
+                        );
+                        historial.add(hc);
+                    }
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error al leer el historial clínico: " + e.getMessage());
+        }
+        return historial;
     }
 }

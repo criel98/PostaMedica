@@ -23,10 +23,14 @@ public class GestorColas {
         }
         return instancia;
     }
+       public java.util.Queue<Paciente> getColaTriaje() {
+        return colaTriaje;
+    }
 
     // --- MÉTODOS PARA TRIAJE ---
     public void encolarTriaje(Paciente p) {
         colaTriaje.add(p);
+          System.out.println("DEBUG: Paciente " + p.getNombre() + " encolado en Triaje. Tamano actual: " + colaTriaje.size());
     }
 
     public Paciente llamarSiguienteTriaje() {
@@ -42,4 +46,5 @@ public class GestorColas {
     public Paciente llamarSiguienteConsultorio() {
         return colaConsultorio.poll();
     }
+ 
 }

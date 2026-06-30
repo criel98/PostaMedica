@@ -29,6 +29,7 @@ public class Admisiones extends javax.swing.JFrame {
         txtApellidoMaterno.setVisible(false);
         btnLimpiar.setEnabled(false);
         btnEditar.setEnabled(false);
+        btnColaTriaje.setEnabled(false);
     }
 
     private void enableBox() {
@@ -62,6 +63,21 @@ public class Admisiones extends javax.swing.JFrame {
                 p.getNumeroTelefono(),
                 p.getTipoPaciente(),});
         }
+    }
+
+    private void cargarTablaDesdeGestor(Paciente p) {
+        modeloTabla.setRowCount(0); // Limpiamos la tabla
+
+        modeloTabla.addRow(new Object[]{
+            p.getIdPaciente(),
+            p.getTipoDocumento(),
+            p.getNumeroDocumento(),
+            p.getNombre() + " " + p.getApellidoPaterno() + " " + p.getApellidoMaterno(),
+            p.getFechaNacimiento(),
+            p.getGenero(),
+            p.getNumeroTelefono(),
+            p.getTipoPaciente()
+        });
     }
 
     private void cargar_datos_formulario() {
@@ -210,7 +226,7 @@ public class Admisiones extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         btnLimpiar = new javax.swing.JButton();
-        btnCerrar = new javax.swing.JButton();
+        btnColaTriaje = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         lblTipoDocumento = new javax.swing.JLabel();
         lblNumeroDocumento = new javax.swing.JLabel();
@@ -239,9 +255,10 @@ public class Admisiones extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de Clientes - Posta Médica");
-        setMinimumSize(new java.awt.Dimension(852, 866));
+        setMinimumSize(new java.awt.Dimension(750, 730));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(750, 730));
 
         btnRegistrar.setBackground(new java.awt.Color(0, 102, 204));
         btnRegistrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -315,13 +332,13 @@ public class Admisiones extends javax.swing.JFrame {
             }
         });
 
-        btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnCerrar.setForeground(new java.awt.Color(51, 51, 51));
-        btnCerrar.setText("Cerrar");
-        btnCerrar.setPreferredSize(new java.awt.Dimension(180, 40));
-        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
+        btnColaTriaje.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnColaTriaje.setForeground(new java.awt.Color(51, 51, 51));
+        btnColaTriaje.setText("Encolar Triaje");
+        btnColaTriaje.setPreferredSize(new java.awt.Dimension(180, 40));
+        btnColaTriaje.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrarActionPerformed(evt);
+                btnColaTriajeActionPerformed(evt);
             }
         });
 
@@ -555,24 +572,29 @@ public class Admisiones extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel14)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnBuscar))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(91, 91, 91)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(33, 33, 33)
+                                        .addComponent(btnColaTriaje, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel14)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnBuscar)))))
                         .addGap(16, 16, 16))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -588,7 +610,7 @@ public class Admisiones extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnColaTriaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -619,54 +641,109 @@ public class Admisiones extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtApellidoPaternoActionPerformed
 
-    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        this.dispose(); // Cierra de forma correcta esta ventana actual
-    }//GEN-LAST:event_btnCerrarActionPerformed
+    private void btnColaTriajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColaTriajeActionPerformed
+        int filaSeleccionada = tblPacientes.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un paciente de la lista.", "Atención", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idSeleccionado = Integer.parseInt(tblPacientes.getValueAt(filaSeleccionada, 0).toString());
+        Paciente p = gestor.buscarPorId(idSeleccionado);
+
+        if (p != null) {
+            // --- AQUÍ LANZAMOS EL DIÁLOGO DE SELECCIÓN ---
+            String[] opciones = {"Atención Regular", "Emergencia"};
+            int seleccion = JOptionPane.showOptionDialog(this,
+                    "¿Cómo desea derivar al paciente " + p.getNombre() + "?",
+                    "Selección de Prioridad",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]);
+
+            // Manejo de la selección del usuario
+            if (seleccion == 0) { // Atención Regular
+                p.setTipoPaciente("Regular");
+                GestorColas.getInstancia().encolarTriaje(p);
+                JOptionPane.showMessageDialog(this, "Paciente enviado a la cola de TRIAJE regular.");
+            } else if (seleccion == 1) { // Emergencia
+                p.setTipoPaciente("Emergencia");
+                GestorColas.getInstancia().encolarConsultorio(p);
+                JOptionPane.showMessageDialog(this, "Paciente enviado directamente a EMERGENCIA.");
+            }
+
+            limpiarCampos();
+            cargarTablaDesdeGestor();
+        }
+    }//GEN-LAST:event_btnColaTriajeActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-       // 1. Validación de campos
+        // 1. Validación de campos
         if (!validar_campos_formulario()) {
             return;
         }
 
-        // 2. Extracción de datos
+        // 2. Extracción de datos principales
         String numDoc = txtNumeroDocumento.getText().trim();
-        String nombre = txtNombre.getText().toUpperCase().trim();
-        String apPaterno = txtApellidoPaterno.getText().toUpperCase().trim();
-        String apMaterno = txtApellidoMaterno.getText().toUpperCase().trim();
-        String fechaNac = txtFechaNacim.getText().trim();
-        String genero = (cboGenero.getSelectedIndex() == 0) ? "No especifica" : cboGenero.getSelectedItem().toString();
-        String tipoDoc = (cboTipoDocumento.getSelectedIndex() == 0) ? "" : cboTipoDocumento.getSelectedItem().toString();
-        
-        // Manejo seguro del número de teléfono (por si el usuario deja el campo vacío)
-        int numero = 0;
-        try {
-            numero = Integer.parseInt(txtTelefono.getText().trim());
-        } catch (NumberFormatException e) {
-            numero = 0; 
-        }
-        
         String tipoAtencion = cboEmergencia.getSelectedItem().toString();
-        
-        // 3. Generación de ID
-        int idGenerado = (int) (System.currentTimeMillis() % 100000);
 
-        // 4. Creación del objeto
-        Package_Clases.Paciente nuevoPaciente = new Package_Clases.Paciente(
-                idGenerado, nombre, apPaterno, apMaterno, fechaNac, genero, tipoDoc, numDoc, numero, tipoAtencion
-        );
-        
-        // 5. Persistencia (Guardado en CSV)
-        gestor.Guardar(nuevoPaciente);
-        
-        // 6. ENRUTAMIENTO: Derivar a la cola correspondiente
-        if (tipoAtencion.equalsIgnoreCase("Emergencia")) {
-            GestorColas.getInstancia().encolarConsultorio(nuevoPaciente);
-            JOptionPane.showMessageDialog(this, "Paciente registrado. ¡DERIVADO A EMERGENCIA!");
+        // =========================================================
+        // LÓGICA INTELIGENTE: ¿ES PACIENTE NUEVO O CONTINUADOR?
+        // =========================================================
+        Paciente pacienteExistente = gestor.Buscar(numDoc);
+
+        if (pacienteExistente != null) {
+            // ---- CASO A: PACIENTE CONTINUADOR ----
+            // Ya existe en el CSV. Solo actualizamos por qué vino hoy (Emergencia/Normal)
+            pacienteExistente.setTipoPaciente(tipoAtencion);
+
+            // Enrutamiento directo a colas (SIN guardar duplicados en el CSV)
+            if (tipoAtencion.equalsIgnoreCase("Emergencia")) {
+                GestorColas.getInstancia().encolarConsultorio(pacienteExistente);
+                JOptionPane.showMessageDialog(this, "Paciente Continuador (" + pacienteExistente.getNombre() + "). ¡DERIVADO A EMERGENCIA!");
+            } else {
+                GestorColas.getInstancia().encolarTriaje(pacienteExistente);
+                JOptionPane.showMessageDialog(this, "Paciente Continuador (" + pacienteExistente.getNombre() + "). Enviado a Triaje.");
+            }
+
         } else {
-            GestorColas.getInstancia().encolarTriaje(nuevoPaciente);
-            JOptionPane.showMessageDialog(this, "Paciente registrado y enviado a Triaje.");
+            // ---- CASO B: PACIENTE TOTALMENTE NUEVO ----
+            String nombre = txtNombre.getText().toUpperCase().trim();
+            String apPaterno = txtApellidoPaterno.getText().toUpperCase().trim();
+            String apMaterno = txtApellidoMaterno.getText().toUpperCase().trim();
+            String fechaNac = txtFechaNacim.getText().trim();
+            String genero = (cboGenero.getSelectedIndex() == 0) ? "No especifica" : cboGenero.getSelectedItem().toString();
+            String tipoDoc = (cboTipoDocumento.getSelectedIndex() == 0) ? "" : cboTipoDocumento.getSelectedItem().toString();
+
+            int numero = 0;
+            try {
+                numero = Integer.parseInt(txtTelefono.getText().trim());
+            } catch (NumberFormatException e) {
+                numero = 0;
+            }
+
+            int idGenerado = (int) (System.currentTimeMillis() % 100000);
+
+            // Creación del objeto y Persistencia
+            Package_Clases.Paciente nuevoPaciente = new Package_Clases.Paciente(
+                    idGenerado, nombre, apPaterno, apMaterno, fechaNac, genero, tipoDoc, numDoc, numero, tipoAtencion
+            );
+
+            gestor.Guardar(nuevoPaciente); // SOLO guardamos si es verdaderamente nuevo
+
+            // Enrutamiento a colas
+            if (tipoAtencion.equalsIgnoreCase("Emergencia")) {
+                GestorColas.getInstancia().encolarConsultorio(nuevoPaciente);
+                JOptionPane.showMessageDialog(this, "Paciente NUEVO registrado. ¡DERIVADO A EMERGENCIA!");
+            } else {
+                GestorColas.getInstancia().encolarTriaje(nuevoPaciente);
+                JOptionPane.showMessageDialog(this, "Paciente NUEVO registrado y enviado a Triaje.");
+            }
         }
+
+        // 3. Limpiamos la interfaz para el siguiente paciente
         limpiarCampos();
         cargarTablaDesdeGestor();
 
@@ -707,35 +784,66 @@ public class Admisiones extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // 1. Validamos que los campos obligatorios no estén vacíos
         if (!validar_campos_formulario()) {
             return;
         }
 
+        // 2. Verificamos que haya un paciente seleccionado en la tabla
         int filaSeleccionada = tblPacientes.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un paciente de la tabla para editar.");
+            JOptionPane.showMessageDialog(this, "Seleccione un paciente de la tabla para editar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // 1. OBTENEMOS EL CÓDIGO ÚNICO (Columna 0)
-        String codigoSeleccionado = tblPacientes.getValueAt(filaSeleccionada, 0).toString();
+        // 3. Obtenemos el ID único (Columna 0) y el nuevo DNI digitado
+        int idSeleccionado = Integer.parseInt(tblPacientes.getValueAt(filaSeleccionada, 0).toString());
         String numDocNuevo = txtNumeroDocumento.getText().trim();
 
-        // 2. VALIDACIÓN DE DUPLICADOS: Solo si hay un DNI ingresado
+        // 4. VALIDACIÓN DE DUPLICADOS INTELIGENTE
         if (!numDocNuevo.isEmpty()) {
+            Paciente pacienteExistente = gestor.Buscar(numDocNuevo);
 
+            // Si encontramos a alguien con ese DNI, verificamos que NO sea el mismo paciente que estamos editando
+            if (pacienteExistente != null && pacienteExistente.getIdPaciente() != idSeleccionado) {
+                JOptionPane.showMessageDialog(this, "Error: El DNI " + numDocNuevo + " ya está registrado a nombre de otro paciente.", "DNI Duplicado", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
         }
 
-        // 3. RECOLECTAMOS DATOS
+        // 5. Recolectamos el resto de los datos modificados
         String tipoDoc = (cboTipoDocumento.getSelectedIndex() == 0) ? "" : cboTipoDocumento.getSelectedItem().toString();
         String nombre = txtNombre.getText().toUpperCase().trim();
         String apPaterno = txtApellidoPaterno.getText().toUpperCase().trim();
         String apMaterno = txtApellidoMaterno.getText().toUpperCase().trim();
         String fechaNac = txtFechaNacim.getText().trim();
         String genero = (cboGenero.getSelectedIndex() == 0) ? "No especifica" : cboGenero.getSelectedItem().toString();
-        String telefono = txtTelefono.getText().trim();
         String tipoAtencion = cboEmergencia.getSelectedItem().toString();
 
+        // Conversión segura del número de teléfono
+        int numeroTelefono = 0;
+        try {
+            numeroTelefono = Integer.parseInt(txtTelefono.getText().trim());
+        } catch (NumberFormatException e) {
+            numeroTelefono = 0;
+        }
+
+        // 6. Creamos el objeto Paciente "Actualizado" (Manteniendo su ID original)
+        Paciente pacienteActualizado = new Paciente(
+                idSeleccionado, nombre, apPaterno, apMaterno, fechaNac, genero, tipoDoc, numDocNuevo, numeroTelefono, tipoAtencion
+        );
+
+        // 7. Enviamos a actualizar al Gestor CSV
+        // NOTA: Debes tener este método creado en DatosPacienteCSV
+        boolean exito = gestor.actualizarPaciente(pacienteActualizado);
+
+        if (exito) {
+            JOptionPane.showMessageDialog(this, "Los datos del paciente han sido actualizados correctamente.", "Actualización Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            cargarTablaDesdeGestor(); // Refrescamos la tabla para ver los cambios
+        } else {
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al intentar actualizar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -743,25 +851,28 @@ public class Admisiones extends javax.swing.JFrame {
         if (dniBusqueda.isEmpty()) {
             return;
         }
+
         Paciente pacienteEncontrado = gestor.Buscar(dniBusqueda);
+
         if (pacienteEncontrado != null) {
-            // Rellenamos el formulario automáticamente
+            // Rellenamos cajas de texto
             cboEmergencia.setSelectedItem(pacienteEncontrado.getTipoPaciente());
             cboTipoDocumento.setSelectedItem(pacienteEncontrado.getTipoDocumento());
             txtNombre.setText(pacienteEncontrado.getNombre());
-            txtApellidoPaterno.setText(pacienteEncontrado.getApellidoPaterno());
-            txtApellidoMaterno.setText(pacienteEncontrado.getApellidoMaterno());
-            txtNumeroDocumento.setText(pacienteEncontrado.getNumeroDocumento());
-            txtFechaNacim.setText(pacienteEncontrado.getFechaNacimiento());
-            cboGenero.setSelectedItem(pacienteEncontrado.getGenero());
-            txtTelefono.setText(Integer.toString(pacienteEncontrado.getNumeroTelefono()));
+            // ... (resto de tus txt fields) ...
             txtBuscar.setText("");
-            JOptionPane.showMessageDialog(this, "Paciente con encontrado: "+ pacienteEncontrado.getNombre()+ " (ID: " + pacienteEncontrado.getIdPaciente() + ")");
+
+            // ¡MAGIA! Llamamos al método sobrecargado pasándole el paciente
+            cargarTablaDesdeGestor(pacienteEncontrado);
+
+            JOptionPane.showMessageDialog(this, "Paciente encontrado: " + pacienteEncontrado.getNombre());
+
         } else {
             JOptionPane.showMessageDialog(this, "Paciente no registrado. Puede proceder a registrarlo como nuevo.");
+
+            // Si no lo encuentra, volvemos a cargar a TODOS (usando el método original sin parámetros)
+            cargarTablaDesdeGestor();
         }
-
-
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void tblPacientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPacientesMouseClicked
@@ -770,21 +881,41 @@ public class Admisiones extends javax.swing.JFrame {
             int filaSeleccionada = tblPacientes.getSelectedRow();
 
             if (filaSeleccionada != -1) {
-                // Obtenemos el N° de Documento de la fila seleccionada (que está en la columna 2)
-                String numDocSeleccionado = tblPacientes.getValueAt(filaSeleccionada, 2).toString();
-                Paciente p = gestor.Buscar(numDocSeleccionado);
+
+                int idSeleccionado = Integer.parseInt(tblPacientes.getValueAt(filaSeleccionada, 0).toString());
+
+                Paciente p = gestor.buscarPorId(idSeleccionado);
 
                 if (p != null) {
-                    cboEmergencia.setSelectedItem(String.valueOf(p.getTipoPaciente()));
-                    cboTipoDocumento.setSelectedItem(p.getTipoDocumento());
+                    System.out.println("Este es el codigo de id del paciente seleccionado: " + p.getIdPaciente());
+
+                    cboEmergencia.setSelectedItem(p.getTipoPaciente());
+
+                    // Manejo seguro para emergencias sin tipo de documento
+                    if (p.getTipoDocumento() != null && !p.getTipoDocumento().isEmpty()) {
+                        cboTipoDocumento.setSelectedItem(p.getTipoDocumento());
+                    } else {
+                        cboTipoDocumento.setSelectedIndex(0);
+                    }
+
                     txtNumeroDocumento.setText(p.getNumeroDocumento());
                     txtNombre.setText(p.getNombre());
                     txtApellidoPaterno.setText(p.getApellidoPaterno());
                     txtApellidoMaterno.setText(p.getApellidoMaterno());
                     txtFechaNacim.setText(p.getFechaNacimiento());
                     cboGenero.setSelectedItem(p.getGenero());
-                    txtEdad.setText(String.valueOf(p.calcularEdad()));
+
+                    // Manejo seguro de la edad si la fecha está vacía (Emergencia)
+                    if (p.getFechaNacimiento() != null && p.getFechaNacimiento().length() == 10) {
+                        txtEdad.setText(String.valueOf(p.calcularEdad()));
+                    } else {
+                        txtEdad.setText("");
+                    }
+
                     txtTelefono.setText(String.valueOf(p.getNumeroTelefono()));
+                    btnRegistrar.setEnabled(false);
+                    btnEditar.setEnabled(true);
+                    btnColaTriaje.setEnabled(true);
                 }
             }
         }
@@ -818,7 +949,7 @@ public class Admisiones extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnCerrar;
+    private javax.swing.JButton btnColaTriaje;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnRegistrar;
